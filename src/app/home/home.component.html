@@ -1,0 +1,40 @@
+<main class="home-container">
+  <div class="hero-section">
+    <h1>Bienvenue sur Fitness Gestion</h1>
+    <p>Gérez votre parcours fitness facilement</p>
+    <div class="actions">
+      <p-button label="Commencer" icon="pi pi-play" severity="success"></p-button>
+      <p-button label="En savoir plus" icon="pi pi-info-circle" [outlined]="true"></p-button>
+    </div>
+  </div>
+
+  <div class="features">
+    <p-card *ngFor="let feature of features" [header]="feature.title">
+      <div class="feature-content">
+        <i [class]="feature.icon"></i>
+        <p>{{ feature.description }}</p>
+      </div>
+    </p-card>
+  </div>
+
+  <div class="stats">
+    <p-card>
+      <div class="stat-item">
+        <span class="stat-value">{{ stats.workouts }}</span>
+        <span class="stat-label">Entraînements</span>
+      </div>
+    </p-card>
+    <p-card>
+      <div class="stat-item">
+        <span class="stat-value">{{ stats.users }}</span>
+        <span class="stat-label">Utilisateurs</span>
+      </div>
+    </p-card>
+    <p-card>
+      <div class="stat-item">
+        <span class="stat-value">{{ stats.goals }}</span>
+        <span class="stat-label">Objectifs atteints</span>
+      </div>
+    </p-card>
+  </div>
+</main>
