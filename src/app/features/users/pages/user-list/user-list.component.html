@@ -1,0 +1,43 @@
+<div class="users-page">
+  <div class="users-header">
+    <h1>Gestion des utilisateurs</h1>
+    <button class="btn primary" (click)="goToCreate()">
+      + Nouvel utilisateur
+    </button>
+  </div>
+
+  <table class="users-table" *ngIf="(users$ | async) as users; else empty">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Rôle</th>
+        <th>Statut</th>
+        <th>Créé le</th>
+        <th class="actions-col"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.firstName }} {{ user.lastName }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
+        <td>
+          <span class="badge" [class.badge-active]="user.isActive">
+            {{ user.isActive ? 'Actif' : 'Inactif' }}
+          </span>
+        </td>
+        <td>{{ user.createdAt | date: 'dd/MM/yyyy' }}</td>
+        <td class="actions-col">
+          <button class="btn ghost" (click)="goToEdit(user.id)">Modifier</button>
+          <button class="btn danger" (click)="delete(user.id)">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #empty>
+    <p>Aucun utilisateur pour le moment.</p>
+  </ng-template>
+</div>

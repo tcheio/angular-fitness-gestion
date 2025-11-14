@@ -1,25 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Menubar } from 'primeng/menubar';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   standalone: true,
-  imports: [Menubar]
+  imports: [Menubar, RouterModule],
 })
 export class HeaderComponent implements OnInit {
-  items: MenuItem[] | undefined;
+  items: MenuItem[] = [];
 
   ngOnInit() {
     this.items = [
       {
         label: 'Home',
-        icon: 'pi pi-home'
+        icon: 'pi pi-home',
+        routerLink: '/',
       },
       {
         label: 'Features',
-        icon: 'pi pi-star'
+        icon: 'pi pi-star',
+        routerLink: '/features',
+      },
+      {
+        label: 'Users',
+        icon: 'pi pi-users',
+        routerLink: '/users',
       },
       {
         label: 'Projects',
@@ -27,15 +35,18 @@ export class HeaderComponent implements OnInit {
         items: [
           {
             label: 'Components',
-            icon: 'pi pi-bolt'
+            icon: 'pi pi-bolt',
+            routerLink: '/components',
           },
           {
             label: 'Blocks',
-            icon: 'pi pi-server'
+            icon: 'pi pi-server',
+            routerLink: '/blocks',
           },
           {
             label: 'UI Kit',
-            icon: 'pi pi-pencil'
+            icon: 'pi pi-pencil',
+            routerLink: '/ui',
           },
           {
             label: 'Templates',
@@ -43,20 +54,23 @@ export class HeaderComponent implements OnInit {
             items: [
               {
                 label: 'Apollo',
-                icon: 'pi pi-palette'
+                icon: 'pi pi-palette',
+                routerLink: '/apollo',
               },
               {
                 label: 'Ultima',
-                icon: 'pi pi-palette'
-              }
-            ]
-          }
-        ]
+                icon: 'pi pi-palette',
+                routerLink: '/ultima',
+              },
+            ],
+          },
+        ],
       },
       {
         label: 'Contact',
-        icon: 'pi pi-envelope'
-      }
-    ]
+        icon: 'pi pi-envelope',
+        routerLink: '/contact',
+      },
+    ];
   }
 }
