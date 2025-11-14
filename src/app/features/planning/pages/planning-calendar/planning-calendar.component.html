@@ -1,67 +1,96 @@
-<div class="planning-page">
+<section class="planning-root">
   <h1>Planning & réservations</h1>
   <p class="subtitle">
-    Réservez vos cours de Yoga, CrossFit, Cardio directement depuis le planning.
+    Sélectionnez un jour pour voir les cours disponibles.
   </p>
 
-  <table class="courses-table" *ngIf="(courses$ | async) as courses; else empty">
-    <thead>
-      <tr>
-        <th>Cours</th>
-        <th>Coach</th>
-        <th>Date</th>
-        <th>Salle</th>
-        <th>Niveau</th>
-        <th>Places</th>
-        <th></th>
-      </tr>
-    </thead>
+  <!-- CALENDRIER CENTRÉ EN HAUT -->
+  <div class="calendar-container">
+    <p-datepicker
+      class="planning-datepicker"
+      [(ngModel)]="selectedDate"
+      (onSelect)="onDateChange($event)"
+      [inline]="true"
+      [showWeek]="true"
+      dateFormat="dd/mm/yy"
+    >
+      <!-- template officiel DatePicker v18 -->
+      <ng-template #date let-date>
+        <div class="day-cell">
+          <span>{{ date.day }}</span>
+          <span *ngIf="hasCourse(date)" class="day-dot"></span>
+        </div>
+      </ng-template>
+    </p-datepicker>
+  </div>
 
-    <tbody>
-      <tr *ngFor="let course of courses">
-        <td>{{ course.title }}</td>
-        <td>{{ course.coach }}</td>
-        <td>
-          {{ course.start | date: 'EEEE d MMM • HH:mm' }}
-          –
-          {{ course.end | date: 'HH:mm' }}
-        </td>
-        <td>{{ course.room }}</td>
-        <td>
-          <span
-            class="badge"
-            [ngClass]="{
-              beginner: course.level === 'beginner',
-              intermediate: course.level === 'intermediate',
-              advanced: course.level === 'advanced'
-            }"
-          >
-            {{ course.level }}
-          </span>
-        </td>
-        <td>
-          {{ course.participantsCount }}/{{ course.capacity }}
-          <span class="remaining" *ngIf="getRemainingPlaces(course) > 0">
-            ({{ getRemainingPlaces(course) }} restantes)
-          </span>
-          <span class="full" *ngIf="getRemainingPlaces(course) <= 0">
-            Complet
-          </span>
-        </td>
-        <td>
-          <button
-            class="btn primary"
-            [disabled]="!canReserve(course)"
-            (click)="reserve(course)"
-          >
-            Réserver
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- COURS EN DESSOUS -->
+  <div class="courses-panel">
+    <h2 *ngIf="selectedDate">
+      Cours du {{ selectedDate | date: 'EEEE d MMMM' }}
+    </h2>
 
-  <ng-template #empty>
-    <p>Aucun cours pour le moment.</p>
-  </ng-template>
-</div>
+    <ng-container *ngIf="coursesForSelectedDay.length > 0; else noCourses">
+      <table class="courses-table">
+        <thead>
+          <tr>
+            <th>Cours</th>
+            <th>Coach</th>
+            <th>Heure</th>
+            <th>Salle</th>
+            <th>Niveau</th>
+            <th>Places</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let course of coursesForSelectedDay">
+            <td>{{ course.title }}</td>
+            <td>{{ course.coach }}</td>
+            <td>
+              {{ course.start | date: 'HH:mm' }} – {{ course.end | date: 'HH:mm' }}
+            </td>
+            <td>{{ course.room }}</td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  beginner: course.level === 'beginner',
+                  intermediate: course.level === 'intermediate',
+                  advanced: course.level === 'advanced'
+                }"
+              >
+                {{ course.level }}
+              </span>
+            </td>
+            <td>
+              {{ course.participantsCount }}/{{ course.capacity }}
+              <span class="remaining" *ngIf="getRemainingPlaces(course) > 0">
+                ({{ getRemainingPlaces(course) }} restantes)
+              </span>
+              <span class="full" *ngIf="getRemainingPlaces(course) <= 0">
+                Complet
+              </span>
+            </td>
+            <td>
+              <button
+                class="btn primary"
+                [disabled]="!canReserve(course)"
+                (click)="reserve(course)"
+              >
+                Réserver
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+
+    <ng-template #noCourses>
+      <p class="no-courses">
+        Aucun cours prévu pour cette date.
+      </p>
+    </ng-template>
+  </div>
+</section>

@@ -1,10 +1,55 @@
-.planning-page {
-  padding: 2rem;
+.planning-root {
+  padding: 2.5rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 0.25rem;
 }
 
 .subtitle {
   color: #6b7280;
   margin-bottom: 1.5rem;
+}
+
+/* Calendrier centré */
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.planning-datepicker {
+  display: inline-block;
+}
+
+/* pastille bleue sur les jours avec cours */
+.day-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.day-dot {
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #2563eb;
+}
+
+/* Tableau en dessous */
+.courses-panel {
+  text-align: left;
+}
+
+.courses-panel h2 {
+  margin-bottom: 1.2rem;
 }
 
 .courses-table {
@@ -87,4 +132,8 @@
 .btn.primary[disabled] {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.no-courses {
+  color: #6b7280;
 }
