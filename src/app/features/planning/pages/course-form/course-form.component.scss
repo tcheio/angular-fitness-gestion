@@ -1,0 +1,105 @@
+.course-form-root {
+  max-width: 640px;
+  margin: 2.5rem auto;
+  padding: 0 1rem;
+
+  h1 {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  form {
+    background: #ffffff;
+    padding: 1.75rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  }
+}
+
+/* grille des champs */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.5rem;
+
+  /* sur mobile : une seule colonne */
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  input,
+  select,
+  textarea {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    font-family: inherit;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 1px #2563eb20;
+  }
+}
+
+/* message d’erreur global (conflit d’horaires) */
+.error {
+  color: #b91c1c;
+  font-size: 0.8rem;
+  margin-top: 0.75rem;
+}
+
+/* boutons en bas du formulaire */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+/* boutons (mêmes styles que user/login) */
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn.primary {
+  background: #2563eb;
+  color: #fff;
+
+  &:hover {
+    background: #1d4ed8;
+  }
+}
+
+.btn.ghost {
+  background: transparent;
+  color: #4b5563;
+
+  &:hover {
+    background: #e5e7eb;
+  }
+}

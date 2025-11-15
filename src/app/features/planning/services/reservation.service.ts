@@ -1,31 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Inscription {
-  id?: number;
-  userId: number;
-  coursId: number;
-  dateInscription: string;
-}
+import { InscriptionCours } from './planning.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReservationService {
-  private readonly API_URL = 'http://localhost:3001/inscriptions';
+  private readonly API_URL = 'http://localhost:3001/inscription-cours';
 
   constructor(private http: HttpClient) {}
 
-  getInscriptionsByUser(userId: number): Observable<Inscription[]> {
-    return this.http.get<Inscription[]>(`${this.API_URL}?userId=${userId}`);
+  getInscriptionsByUser(userId: string | number): Observable<InscriptionCours[]> {
+    return this.http.get<InscriptionCours[]>(`${this.API_URL}?userId=${userId}`);
   }
 
-  addInscription(payload: Omit<Inscription, 'id'>): Observable<Inscription> {
-    return this.http.post<Inscription>(this.API_URL, payload);
+  addInscription(payload: Omit<InscriptionCours, 'id'>): Observable<InscriptionCours> {
+    return this.http.post<InscriptionCours>(this.API_URL, payload);
   }
 
-  deleteInscription(id: number): Observable<void> {
+  deleteInscription(id: string | number): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 }
