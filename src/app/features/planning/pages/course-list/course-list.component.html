@@ -1,7 +1,24 @@
 <section class="courses-admin-root">
   <div class="header">
     <h1>Gestion des cours</h1>
-    <button class="btn primary" (click)="create()">+ Nouveau cours</button>
+
+    <div class="header-right">
+      <!-- Select de tri -->
+      <div class="sort">
+        <label for="sort">Trier par :</label>
+        <select
+          id="sort"
+          [(ngModel)]="sortMode"
+          (ngModelChange)="applySort()"
+        >
+          <option value="date-asc">Date (la plus proche)</option>
+          <option value="date-desc">Date (la plus lointaine)</option>
+          <option value="level">Niveau (débutant → avancé)</option>
+        </select>
+      </div>
+
+      <button class="btn primary" (click)="create()">+ Nouveau cours</button>
+    </div>
   </div>
 
   <table class="courses-table" *ngIf="courses.length; else empty">
@@ -26,18 +43,17 @@
         <td>{{ c.start | date: 'HH:mm' }} – {{ c.end | date: 'HH:mm' }}</td>
         <td>{{ c.room }}</td>
         <td>
-            <span
-                class="badge"
-                [ngClass]="{
-                beginner: c.level === 'beginner',
-                intermediate: c.level === 'intermediate',
-                advanced: c.level === 'advanced'
-                }"
-            >
-                {{ c.level | titlecase }}
-            </span>
-            </td>
-
+          <span
+            class="badge"
+            [ngClass]="{
+              beginner: c.level === 'beginner',
+              intermediate: c.level === 'intermediate',
+              advanced: c.level === 'advanced'
+            }"
+          >
+            {{ c.level | titlecase }}
+          </span>
+        </td>
         <td>{{ c.capacity }}</td>
         <td class="actions">
           <button class="btn ghost" (click)="edit(c.id)">Modifier</button>
@@ -48,6 +64,6 @@
   </table>
 
   <ng-template #empty>
-    <p>Aucun cours pour le moment.</p>
+    <p class="empty-message">Aucun cours pour le moment.</p>
   </ng-template>
 </section>
