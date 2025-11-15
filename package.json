@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node check-api.js && ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:angular-fitness-gestion": "node dist/angular-fitness-gestion/server/server.mjs"
+    "serve:ssr:angular-fitness-gestion": "node dist/angular-fitness-gestion/server/server.mjs",
+    "serve:api": "json-server --watch backend/db.json --port 3001"
   },
   "private": true,
   "dependencies": {
@@ -27,6 +28,7 @@
     "@fullcalendar/timegrid": "^6.1.19",
     "@primeng/themes": "^20.3.0",
     "express": "^4.18.2",
+    "json-server": "^1.0.0-beta.3",
     "primeicons": "^7.0.0",
     "primeng": "^18.0.2",
     "rxjs": "~7.8.0",

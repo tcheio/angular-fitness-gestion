@@ -1,8 +1,6 @@
 <section class="planning-root">
   <h1>Planning & réservations</h1>
-  <p class="subtitle">
-    Sélectionnez un jour pour voir les cours disponibles.
-  </p>
+  <p class="subtitle">Sélectionnez un jour pour voir les cours disponibles.</p>
 
   <!-- CALENDRIER CENTRÉ EN HAUT -->
   <div class="calendar-container">
@@ -27,86 +25,92 @@
   <!-- COURS EN DESSOUS -->
   <div class="courses-panel">
     <h2 *ngIf="selectedDate">
-      Cours du {{ selectedDate | date: 'EEEE d MMMM' }}
+      Cours du {{ selectedDate | date: "EEEE d MMMM" }}
     </h2>
 
     <ng-container *ngIf="coursesForSelectedDay.length > 0; else noCourses">
       <table class="courses-table">
-  <thead>
-    <tr>
-      <th>Cours</th>
-      <th>Coach</th>
-      <th>Heure</th>
-      <th>Salle</th>
-      <th>Niveau</th>
-      <th>Places</th>
-      <th *ngIf="isProf || isAdmin">Participants</th>
-      <th></th>
-    </tr>
-  </thead>
+        <thead>
+          <tr>
+            <th>Cours</th>
+            <th>Coach</th>
+            <th>Heure</th>
+            <th>Salle</th>
+            <th>Niveau</th>
+            <th>Places</th>
+            <th *ngIf="isProf || isAdmin">Participants</th>
+            <th></th>
+          </tr>
+        </thead>
 
-  <tbody>
-    <tr *ngFor="let course of coursesForSelectedDay">
-      <td>{{ course.title }}</td>
+        <tbody>
+          <tr *ngFor="let course of coursesForSelectedDay">
+            <td>{{ course.title }}</td>
 
-      <td>{{ course.coach }}</td>
+            <td>{{ course.coach }}</td>
 
-      <td>
-        {{ course.start | date: 'HH:mm' }} – {{ course.end | date: 'HH:mm' }}
-      </td>
+            <td>
+              {{ course.start | date: "HH:mm" }} –
+              {{ course.end | date: "HH:mm" }}
+            </td>
 
-      <td>{{ course.room }}</td>
+            <td>{{ course.room }}</td>
 
-      <td>
-        <span
-          class="badge"
-          [ngClass]="{
-            beginner: course.level === 'beginner',
-            intermediate: course.level === 'intermediate',
-            advanced: course.level === 'advanced'
-          }"
-        >
-          {{ course.level }}
-        </span>
-      </td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  beginner: course.level === 'beginner',
+                  intermediate: course.level === 'intermediate',
+                  advanced: course.level === 'advanced',
+                }"
+              >
+                {{ course.level }}
+              </span>
+            </td>
 
-      <td>
-        {{ course.participantsCount }}/{{ course.capacity }}
-        <span *ngIf="getRemainingPlaces(course) > 0" class="remaining">
-          ({{ getRemainingPlaces(course) }} restantes)
-        </span>
-        <span *ngIf="getRemainingPlaces(course) <= 0" class="full">
-          Complet
-        </span>
-      </td>
+            <td>
+              {{ course.participantsCount }}/{{ course.capacity }}
+              <span *ngIf="getRemainingPlaces(course) > 0" class="remaining">
+                ({{ getRemainingPlaces(course) }} restantes)
+              </span>
+              <span *ngIf="getRemainingPlaces(course) <= 0" class="full">
+                Complet
+              </span>
+            </td>
 
-      <!-- Participants (admin & prof uniquement) -->
-      <td *ngIf="isProf || isAdmin">
-        <ng-container *ngIf="course.participants.length > 0; else none">
-          {{ course.participants.join(', ') }}
-        </ng-container>
-        <ng-template #none>Aucun inscrit</ng-template>
-      </td>
+            <!-- Participants (admin & prof uniquement) -->
+            <td *ngIf="isProf || isAdmin">
+              <ng-container *ngIf="course.participants.length > 0; else none">
+                {{ course.participants.join(", ") }}
+              </ng-container>
+              <ng-template #none>Aucun inscrit</ng-template>
+            </td>
 
-      <td>
-        <button
-          class="btn primary"
-          [disabled]="!canReserve(course)"
-          (click)="reserve(course)"
-        >
-          Réserver
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
+            <td>
+              <button
+                *ngIf="!course.isSubscribed"
+                class="btn primary"
+                [disabled]="!canReserve(course)"
+                (click)="reserve(course)"
+              >
+                Réserver
+              </button>
+              <button
+                *ngIf="course.isSubscribed"
+                class="btn secondary"
+                (click)="cancelReservation(course)"
+              >
+                Annuler
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </ng-container>
 
     <ng-template #noCourses>
-      <p class="no-courses">
-        Aucun cours prévu pour cette date.
-      </p>
+      <p class="no-courses">Aucun cours prévu pour cette date.</p>
     </ng-template>
   </div>
 </section>
