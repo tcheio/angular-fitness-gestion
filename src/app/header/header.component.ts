@@ -34,6 +34,14 @@ export class HeaderComponent implements OnInit {
       },
     ];
 
+    if (this.auth.isAdmin() || this.auth.isProf()) {
+      baseItems.splice(2, 0, {
+        label: 'Cours',
+        icon: 'pi pi-book',
+        routerLink: '/cours',
+      });
+    }
+
     // Users visible uniquement pour admin
     if (this.auth.isAdmin()) {
       baseItems.splice(1, 0, {
@@ -42,6 +50,9 @@ export class HeaderComponent implements OnInit {
         routerLink: '/users',
       });
     }
+
+    
+
 
     this.items = [
       ...baseItems,

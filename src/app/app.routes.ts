@@ -42,6 +42,48 @@ export const routes: Routes = [
 
   {
     path: '',
+    loadComponent: () =>
+      import('./features/planning/pages/planning-calendar/planning-calendar.component').then(
+        (c) => c.PlanningCalendarComponent
+      ),
+  },
+
+  // Liste des cours (admin + prof)
+  {
+    path: 'cours',
+    canActivate: [roleGuard],
+    data: { roles: ['admin', 'prof'] },
+    loadComponent: () =>
+      import('./features/planning/pages/course-list/course-list.component').then(
+        (c) => c.CourseListComponent
+      ),
+  },
+
+  // Création
+  {
+    path: 'cours/new',
+    canActivate: [roleGuard],
+    data: { roles: ['admin', 'prof'] },
+    loadComponent: () =>
+      import('./features/planning/pages/course-form/course-form.component').then(
+        (c) => c.CourseFormComponent
+      ),
+  },
+
+  // Edition
+  {
+    path: 'cours/:id/edit',
+    canActivate: [roleGuard],
+    data: { roles: ['admin', 'prof'] },
+    loadComponent: () =>
+      import('./features/planning/pages/course-form/course-form.component').then(
+        (c) => c.CourseFormComponent
+      ),
+  },
+
+
+  {
+    path: '',
     pathMatch: 'full',
     redirectTo: 'home',
   },

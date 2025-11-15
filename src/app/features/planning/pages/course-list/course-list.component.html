@@ -1,0 +1,53 @@
+<section class="courses-admin-root">
+  <div class="header">
+    <h1>Gestion des cours</h1>
+    <button class="btn primary" (click)="create()">+ Nouveau cours</button>
+  </div>
+
+  <table class="courses-table" *ngIf="courses.length; else empty">
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th>Coach</th>
+        <th>Date</th>
+        <th>Heure</th>
+        <th>Salle</th>
+        <th>Niveau</th>
+        <th>Places</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let c of courses">
+        <td>{{ c.title }}</td>
+        <td>{{ c.coach }}</td>
+        <td>{{ c.start | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ c.start | date: 'HH:mm' }} – {{ c.end | date: 'HH:mm' }}</td>
+        <td>{{ c.room }}</td>
+        <td>
+            <span
+                class="badge"
+                [ngClass]="{
+                beginner: c.level === 'beginner',
+                intermediate: c.level === 'intermediate',
+                advanced: c.level === 'advanced'
+                }"
+            >
+                {{ c.level | titlecase }}
+            </span>
+            </td>
+
+        <td>{{ c.capacity }}</td>
+        <td class="actions">
+          <button class="btn ghost" (click)="edit(c.id)">Modifier</button>
+          <button class="btn danger" (click)="delete(c.id)">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #empty>
+    <p>Aucun cours pour le moment.</p>
+  </ng-template>
+</section>

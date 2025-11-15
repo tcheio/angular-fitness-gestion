@@ -1,0 +1,89 @@
+<section class="course-form-root">
+  <h1>{{ courseId ? 'Modifier un cours' : 'Créer un cours' }}</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Titre</label>
+        <input type="text" formControlName="titre" />
+      </div>
+
+      <div class="form-field">
+        <label>Description</label>
+        <textarea rows="3" formControlName="description"></textarea>
+      </div>
+
+      <div class="form-field">
+        <label>Salle</label>
+        <select formControlName="salleId">
+          <option value="">-- Choisir une salle --</option>
+          <option *ngFor="let s of salles" [value]="s.id">
+            {{ s.nom }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label>Date</label>
+        <input type="date" formControlName="date" />
+      </div>
+
+      <div class="form-field">
+        <label>Heure de début</label>
+        <input type="time" formControlName="heureDebut" />
+      </div>
+
+      <div class="form-field">
+        <label>Durée (minutes)</label>
+        <input type="number" formControlName="duree" />
+      </div>
+
+      <div class="form-field">
+        <label>Capacité (places)</label>
+        <input type="number" formControlName="capacite" />
+      </div>
+
+      <div class="form-field">
+        <label>Niveau</label>
+        <select formControlName="niveau">
+          <option *ngFor="let n of niveaux" [value]="n">
+            {{ n }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Prof sélectionnable seulement pour admin -->
+      <div class="form-field" *ngIf="isAdmin">
+        <label>Coach</label>
+        <select formControlName="profId">
+          <option value="">-- Choisir un coach --</option>
+          <option *ngFor="let p of profs" [value]="p.id">
+            {{ p.prenom }} {{ p.nom }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-field" *ngIf="isProf && !isAdmin">
+        <label>Coach</label>
+        <input
+          type="text"
+          [value]="currentUser.prenom + ' ' + currentUser.nom"
+          disabled
+        />
+      </div>
+    </div>
+
+    <div class="error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" type="submit">
+        {{ courseId ? 'Enregistrer' : 'Créer le cours' }}
+      </button>
+      <button class="btn ghost" type="button" (click)="cancel()">
+        Annuler
+      </button>
+    </div>
+  </form>
+</section>
