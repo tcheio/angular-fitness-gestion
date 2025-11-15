@@ -2,6 +2,7 @@ import { Injectable, Inject, PLATFORM_ID } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { BehaviorSubject, map, Observable } from "rxjs";
+import { environment } from "../../environments/environment";
 
 export interface User {
   id: number;
@@ -17,7 +18,7 @@ export interface User {
   providedIn: "root",
 })
 export class AuthService {
-  private readonly API_URL = "http://localhost:3001";
+  private readonly API_URL = environment.apiUrl;
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
