@@ -1,11 +1,12 @@
 export type UserRole = 'member' | 'coach' | 'admin';
 
 export interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
+  id?: number;         
+  nom: string;
+  prenom: string;
   email: string;
-  role: UserRole;
-  isActive: boolean;
-  createdAt: Date;
+  password: string;
+  role: string;
+  salleId: number;
 }
+
