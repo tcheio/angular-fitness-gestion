@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { forkJoin, map, Observable } from 'rxjs';
-import { User } from '../../../auth/auth.service';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { forkJoin, map, Observable } from "rxjs";
+import { User } from "../../../auth/auth.service";
+import { environment } from "../../../../environments/environment";
 
-export type Niveau = 'beginner' | 'intermediate' | 'advanced';
+export type Niveau = "beginner" | "intermediate" | "advanced";
 
 export interface Cours {
   id: number;
@@ -11,8 +12,8 @@ export interface Cours {
   description: string;
   profId: number;
   salleId: number;
-  horaire: string;   // ISO string
-  duree: number;     // minutes
+  horaire: string; // ISO string
+  duree: number; // minutes
   capacite: number;
   niveau?: Niveau;
 }
@@ -47,10 +48,10 @@ export interface PlanningCourse {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class PlanningService {
-  private readonly API_URL = 'http://localhost:3001';
+  private readonly API_URL = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -64,11 +65,11 @@ export class PlanningService {
     return this.http.get<Cours>(`${this.API_URL}/cours/${id}`);
   }
 
-  createCourse(payload: Omit<Cours, 'id'>): Observable<Cours> {
+  createCourse(payload: Omit<Cours, "id">): Observable<Cours> {
     return this.http.post<Cours>(`${this.API_URL}/cours`, payload);
   }
 
-  updateCourse(id: number, payload: Omit<Cours, 'id'>): Observable<Cours> {
+  updateCourse(id: number, payload: Omit<Cours, "id">): Observable<Cours> {
     return this.http.put<Cours>(`${this.API_URL}/cours/${id}`, payload);
   }
 
@@ -92,11 +93,16 @@ export class PlanningService {
     const cours$ = this.getRawCourses();
     const salles$ = this.getSalles();
     const inscriptions$ = this.http.get<InscriptionCours[]>(
-      `${this.API_URL}/inscription-cours`
+      `${this.API_URL}/inscription-cours`,
     );
     const users$ = this.http.get<User[]>(`${this.API_URL}/users`);
 
-    return forkJoin({ cours: cours$, salles: salles$, inscriptions: inscriptions$, users: users$ }).pipe(
+    return forkJoin({
+      cours: cours$,
+      salles: salles$,
+      inscriptions: inscriptions$,
+      users: users$,
+    }).pipe(
       map(({ cours, salles, inscriptions, users }) =>
         cours.map((c) => {
           const startDate = new Date(c.horaire);
@@ -105,10 +111,12 @@ export class PlanningService {
           const salle = salles.find((s) => s.id == c.salleId);
 
           const prof = users.find((u) => u.id == c.profId);
-          const coach = prof ? `${prof.prenom} ${prof.nom}` : `Coach #${c.profId}`;
+          const coach = prof
+            ? `${prof.prenom} ${prof.nom}`
+            : `Coach #${c.profId}`;
 
           const coursInscriptions = inscriptions.filter(
-            (i) => i.coursId == c.id
+            (i) => i.coursId == c.id,
           );
           const participantUserIds = coursInscriptions.map((i) => i.userId);
 
@@ -131,17 +139,21 @@ export class PlanningService {
             participantUserIds,
             participants,
           } as PlanningCourse;
-        })
-      )
+        }),
+      ),
     );
   }
 
   private inferLevel(c: Cours): Niveau {
     const txt = `${c.titre} ${c.description}`.toLowerCase();
-    if (txt.includes('débutant')) return 'beginner';
-    if (txt.includes('intensif') || txt.includes('confirmé') || txt.includes('avancé')) {
-      return 'advanced';
+    if (txt.includes("débutant")) return "beginner";
+    if (
+      txt.includes("intensif") ||
+      txt.includes("confirmé") ||
+      txt.includes("avancé")
+    ) {
+      return "advanced";
     }
-    return 'intermediate';
+    return "intermediate";
   }
 }

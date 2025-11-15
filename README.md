@@ -25,3 +25,36 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+---
+
+## Running with Docker
+
+This project is fully containerized and can be run using Docker and Docker Compose.
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Running the application
+
+1.  Open a terminal at the root of the project.
+2.  Run the following command to build the Docker images and start the containers in detached mode:
+
+    ```sh
+    docker-compose up --build -d
+    ```
+
+### Accessing the application
+
+-   **Frontend (Angular App)**: [http://localhost:4200](http://localhost:4200)
+-   **Backend (API)**: [http://localhost:3001](http://localhost:3001)
+
+### Stopping the application
+
+To stop and remove the containers, networks, and volumes, run:
+
+```sh
+docker-compose down
+```

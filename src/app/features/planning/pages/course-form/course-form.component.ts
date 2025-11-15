@@ -129,6 +129,31 @@ export class CourseFormComponent implements OnInit {
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+
+      const errors: string[] = [];
+      const fieldNames: { [key: string]: string } = {
+        titre: "Titre",
+        description: "Description",
+        salleId: "Salle",
+        date: "Date",
+        heureDebut: "Heure de début",
+        duree: "Durée",
+        capacite: "Capacité",
+        niveau: "Niveau",
+        profId: "Professeur",
+      };
+
+      Object.keys(this.form.controls).forEach((key) => {
+        const control = this.form.get(key);
+        if (control?.invalid && control.hasError("required")) {
+          errors.push(fieldNames[key] || key);
+        }
+      });
+
+      if (errors.length > 0) {
+        this.errorMessage = `Les champs suivants sont requis : ${errors.join(", ")}.`;
+      }
+
       return;
     }
 
