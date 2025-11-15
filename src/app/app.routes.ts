@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './auth/auth.guard';
+import { roleGuard } from './auth/role.guard';
 
 export const routes: Routes = [
   {
@@ -15,31 +16,37 @@ export const routes: Routes = [
       import('./home/home.component').then(c => c.HomeComponent),
   },
 
+  /* Users : uniquement admin */
   {
     path: 'users',
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin'] },
     loadChildren: () =>
       import('./features/users/users.routes').then(m => m.USERS_ROUTES),
   },
 
+  /* Planning :
+     - admin → tous les cours
+     - prof → ses cours
+     - adherent → ses cours inscrits
+  */
   {
     path: 'planning',
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin', 'prof', 'adherent'] },
     loadChildren: () =>
       import('./features/planning/planning.routes').then(
         m => m.PLANNING_ROUTES
       ),
   },
 
-  // Au lancement → redirection vers /login
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'login',
+    redirectTo: 'home',
   },
-
   {
     path: '**',
-    redirectTo: 'login',
+    redirectTo: 'home',
   },
 ];

@@ -9,7 +9,7 @@ export interface User {
   prenom: string;
   email: string;
   password: string;
-  role: string;
+  role: 'admin' | 'prof' | 'adherent';
   salleId: number;
 }
 
@@ -17,12 +17,11 @@ export interface User {
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:3001'; // adapte si besoin
+  private readonly API_URL = 'http://localhost:3001';
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  /** true uniquement dans le navigateur, false côté serveur (SSR) */
   private readonly isBrowser: boolean;
 
   constructor(
@@ -31,7 +30,6 @@ export class AuthService {
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
 
-    // Ne pas accéder à localStorage côté serveur
     if (this.isBrowser) {
       const stored = localStorage.getItem('currentUser');
       if (stored) {
@@ -56,14 +54,11 @@ export class AuthService {
           if (!users || users.length === 0) {
             throw new Error('Identifiants invalides');
           }
-
           const user = users[0];
           this.currentUserSubject.next(user);
-
           if (this.isBrowser) {
             localStorage.setItem('currentUser', JSON.stringify(user));
           }
-
           return user;
         })
       );
@@ -82,5 +77,28 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return !!this.currentUserSubject.value;
+  }
+
+  /* ==== Helpers de rôles ==== */
+
+  getRole(): User['role'] | null {
+    return this.currentUserSubject.value?.role ?? null;
+  }
+
+  hasRole(roles: User['role'][]): boolean {
+    const role = this.getRole();
+    return !!role && roles.includes(role);
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === 'admin';
+  }
+
+  isProf(): boolean {
+    return this.getRole() === 'prof';
+  }
+
+  isAdherent(): boolean {
+    return this.getRole() === 'adherent';
   }
 }

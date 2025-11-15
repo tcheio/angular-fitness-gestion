@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, map, Observable } from 'rxjs';
-import { User } from '../../../models/user.model';
+import { User } from '../../../auth/auth.service';
 
 export interface Cours {
   id: number;
@@ -9,11 +9,10 @@ export interface Cours {
   description: string;
   profId: number;
   salleId: number;
-  horaire: string; 
-  duree: number;    
+  horaire: string;
+  duree: number;
   capacite: number;
 }
-
 
 export interface Salle {
   id: number;
@@ -29,23 +28,27 @@ export interface Inscription {
   dateInscription: string;
 }
 
+/** utilisé par le component + template */
 export interface PlanningCourse {
   id: number;
+  profId: number;
   title: string;
   coach: string;
-  start: string; 
-  end: string;   
+  start: string;
+  end: string;
   room: string;
   level: 'beginner' | 'intermediate' | 'advanced';
   capacity: number;
   participantsCount: number;
+  participantUserIds: number[];
+  participants: string[];
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlanningService {
-  private readonly API_URL = 'http://localhost:3001'; 
+  private readonly API_URL = 'http://localhost:3001';
 
   constructor(private http: HttpClient) {}
 
@@ -58,34 +61,40 @@ export class PlanningService {
     const users$ = this.http.get<User[]>(`${this.API_URL}/users`);
 
     return forkJoin({ cours: cours$, salles: salles$, inscriptions: inscriptions$, users: users$ }).pipe(
-  map(({ cours, salles, inscriptions, users }) =>
-    cours.map((c) => {
-      const startDate = new Date(c.horaire);
-      const endDate = new Date(startDate.getTime() + c.duree * 60_000);
+      map(({ cours, salles, inscriptions, users }) =>
+        cours.map((c) => {
+          const startDate = new Date(c.horaire);
+          const endDate = new Date(startDate.getTime() + c.duree * 60_000);
 
-      const salle = salles.find((s) => s.id === c.salleId);
-      const prof = users.find((u) => u.id === c.profId);
-      const coach = prof ? `${prof.prenom} ${prof.nom}` : `Coach #${c.profId}`;
+          const salle = salles.find((s) => s.id == c.salleId);
+          const prof = users.find((u) => u.id == c.profId);
 
-      const participantsCount = inscriptions.filter(
-        (i) => i.coursId === c.id
-      ).length;
+          const courseInscriptions = inscriptions.filter(
+            (i) => i.coursId === c.id
+          );
+          const participantUserIds = courseInscriptions.map((i) => i.userId);
+          const participants = participantUserIds.map((id) => {
+            const u = users.find((user) => user.id === id);
+            return u ? `${u.prenom} ${u.nom}` : `Membre #${id}`;
+          });
 
-      return {
-        id: c.id,
-        title: c.titre,
-        coach,
-        start: startDate.toISOString(),
-        end: endDate.toISOString(),
-        room: salle ? salle.nom : `Salle #${c.salleId}`,
-        level: this.inferLevel(c),
-        capacity: c.capacite ?? 15,   // 👈 récupère la capacité du JSON (15 par défaut si manquant)
-        participantsCount,
-      } as PlanningCourse;
-    })
-  )
-);
-
+          return {
+            id: c.id,
+            profId: c.profId,
+            title: c.titre,
+            coach: prof ? `${prof.prenom} ${prof.nom}` : `Coach #${c.profId}`,
+            start: startDate.toISOString(),
+            end: endDate.toISOString(),
+            room: salle ? salle.nom : `Salle #${c.salleId}`,
+            level: this.inferLevel(c),
+            capacity: c.capacite ?? 15,
+            participantsCount: participantUserIds.length,
+            participantUserIds,
+            participants,
+          } as PlanningCourse;
+        })
+      )
+    );
   }
 
   private inferLevel(c: Cours): 'beginner' | 'intermediate' | 'advanced' {
