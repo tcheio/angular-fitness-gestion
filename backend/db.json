@@ -43,46 +43,49 @@
     }
   ],
   "cours": [
-    {
-      "id": "1",
-      "titre": "Yoga débutant",
-      "description": "Cours d’initiation au yoga",
-      "profId": 2,
-      "salleId": 1,
-      "horaire": "2025-10-18T09:00:00",
-      "duree": 60
-    },
-    {
-      "id": "2",
-      "titre": "Crossfit intensif",
-      "description": "Entraînement intensif pour sportifs confirmés",
-      "profId": 2,
-      "salleId": 1,
-      "horaire": "2025-10-19T18:00:00",
-      "duree": 45
-    },
-    {
-      "id": "3",
-      "titre": "Zumba fun",
-      "description": "Danse et cardio en rythme !",
-      "profId": 2,
-      "salleId": 2,
-      "horaire": "2025-10-20T17:30:00",
-      "duree": 50
-    }
-  ],
+  {
+    "id": 1,
+    "titre": "Yoga débutant",
+    "description": "Cours d’initiation au yoga",
+    "profId": 2,
+    "salleId": 1,
+    "horaire": "2025-11-15T09:00:00",
+    "duree": 60,
+    "capacite": 12
+  },
+  {
+    "id": 2,
+    "titre": "Crossfit intensif",
+    "description": "Entraînement intensif pour sportifs confirmés",
+    "profId": 2,
+    "salleId": 1,
+    "horaire": "2025-11-15T18:00:00",
+    "duree": 45,
+    "capacite": 16
+  },
+  {
+    "id": 3,
+    "titre": "Zumba fun",
+    "description": "Danse et cardio en rythme !",
+    "profId": 2,
+    "salleId": 2,
+    "horaire": "2025-11-15T17:30:00",
+    "duree": 50,
+    "capacite": 20
+  }
+],
   "inscriptions": [
     {
       "id": "1",
       "userId": 3,
       "coursId": 1,
-      "dateInscription": "2025-10-10T10:00:00"
+      "dateInscription": "2025-11-11T10:00:00"
     },
     {
       "id": "2",
       "userId": 3,
       "coursId": 3,
-      "dateInscription": "2025-10-12T14:00:00"
+      "dateInscription": "2025-11-11T14:00:00"
     }
   ],
   "historiques": [
