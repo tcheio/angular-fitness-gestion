@@ -1,0 +1,52 @@
+<div class="user-form-page">
+  <h1>{{ isEditMode ? 'Modifier un utilisateur' : 'Nouvel utilisateur' }}</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="user-form">
+    <div class="form-row">
+      <label for="firstName">Prénom</label>
+      <input id="firstName" type="text" formControlName="firstName" />
+      <div class="error" *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched">
+        Le prénom est requis (min. 2 caractères).
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label for="lastName">Nom</label>
+      <input id="lastName" type="text" formControlName="lastName" />
+      <div class="error" *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched">
+        Le nom est requis (min. 2 caractères).
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" />
+      <div class="error" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+        Email invalide.
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label for="role">Rôle</label>
+      <select id="role" formControlName="role">
+        <option *ngFor="let role of userService.roles" [value]="role">
+          {{ role }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-row checkbox-row">
+      <label>
+        <input type="checkbox" formControlName="isActive" />
+        Utilisateur actif
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn ghost" (click)="cancel()">Annuler</button>
+      <button type="submit" class="btn primary">
+        {{ isEditMode ? 'Enregistrer' : 'Créer' }}
+      </button>
+    </div>
+  </form>
+</div>
