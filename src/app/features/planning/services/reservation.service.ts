@@ -1,94 +1,31 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Reservation } from '../../../models/reservation.model';
-import { PlanningService } from './planning.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+export interface Inscription {
+  id?: number;
+  userId: number;
+  coursId: number;
+  dateInscription: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReservationService {
-  private readonly _reservations$ = new BehaviorSubject<Reservation[]>([]);
+  private readonly API_URL = 'http://localhost:3001/inscriptions';
 
-  // Pour l'instant, on simule un utilisateur connecté avec l'id 1
-  private readonly currentUserId = 1;
+  constructor(private http: HttpClient) {}
 
-  constructor(private readonly planningService: PlanningService) {}
-
-  get reservations$(): Observable<Reservation[]> {
-    return this._reservations$.asObservable();
+  getInscriptionsByUser(userId: number): Observable<Inscription[]> {
+    return this.http.get<Inscription[]>(`${this.API_URL}?userId=${userId}`);
   }
 
-  get snapshot(): Reservation[] {
-    return this._reservations$.value;
+  addInscription(payload: Omit<Inscription, 'id'>): Observable<Inscription> {
+    return this.http.post<Inscription>(this.API_URL, payload);
   }
 
-  getUserReservations(userId: number = this.currentUserId): Reservation[] {
-    return this.snapshot.filter(r => r.userId === userId);
-  }
-
-  canReserve(courseId: number, userId: number = this.currentUserId): boolean {
-    const course = this.planningService.getCourseById(courseId);
-    if (!course) return false;
-
-    // déjà réservé ?
-    const alreadyReserved = this.snapshot.some(
-      r => r.courseId === courseId && r.userId === userId
-    );
-    if (alreadyReserved) return false;
-
-    // cours plein ?
-    if (course.participantsCount >= course.capacity) return false;
-
-    return true;
-  }
-
-  addReservation(courseId: number, userId: number = this.currentUserId): boolean {
-    if (!this.canReserve(courseId, userId)) {
-      return false;
-    }
-
-    const reservations = this.snapshot;
-    const newId = reservations.length
-      ? Math.max(...reservations.map(r => r.id)) + 1
-      : 1;
-
-    const newReservation: Reservation = {
-      id: newId,
-      userId,
-      courseId,
-      createdAt: new Date(),
-    };
-
-    // Mise à jour des réservations
-    this._reservations$.next([...reservations, newReservation]);
-
-    // Mise à jour du nombre de participants dans le cours
-    const course = this.planningService.getCourseById(courseId);
-    if (course) {
-      this.planningService.updateCourse(courseId, {
-        participantsCount: course.participantsCount + 1,
-      });
-    }
-
-    return true;
-  }
-
-  cancelReservation(reservationId: number): void {
-    const reservations = this.snapshot;
-    const reservation = reservations.find(r => r.id === reservationId);
-    if (!reservation) return;
-
-    // On retire la réservation
-    this._reservations$.next(
-      reservations.filter(r => r.id !== reservationId)
-    );
-
-    // On décrémente les participants dans le cours
-    const course = this.planningService.getCourseById(reservation.courseId);
-    if (course && course.participantsCount > 0) {
-      this.planningService.updateCourse(course.id, {
-        participantsCount: course.participantsCount - 1,
-      });
-    }
+  deleteInscription(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 }

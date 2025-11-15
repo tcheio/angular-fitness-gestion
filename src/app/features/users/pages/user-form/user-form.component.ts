@@ -1,75 +1,86 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../../../models/user.model';
 
 @Component({
   selector: 'app-user-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss'],
 })
 export class UserFormComponent implements OnInit {
   form!: FormGroup;
-  isEditMode = false;
-  userId!: number;
+  userId: number | null = null;
+  loading = false;
+
+  roles = ['admin', 'prof', 'adherent'];
 
   constructor(
-    private readonly fb: FormBuilder,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    public readonly userService: UserService
+    private fb: FormBuilder,
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      prenom: ['', Validators.required],
+      nom: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      role: ['member', Validators.required],
-      isActive: [true],
+      password: ['', Validators.required],
+      role: ['', Validators.required],
+      salleId: [1, Validators.required],
     });
 
-    this.route.paramMap.subscribe(params => {
-      const idParam = params.get('id');
-      if (idParam) {
-        this.isEditMode = true;
-        this.userId = +idParam;
-        const user = this.userService.getUserById(this.userId);
-        if (user) {
-          this.form.patchValue({
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            role: user.role,
-            isActive: user.isActive,
-          });
-        } else {
-          // id inexistant -> retour à la liste
-          this.router.navigate(['/users']);
-        }
-      }
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      this.userId = +idParam;
+      this.loadUser(this.userId);
+    }
+  }
+
+  private loadUser(id: number): void {
+    this.loading = true;
+    this.userService.getUserById(id).subscribe({
+      next: (user) => {
+        this.loading = false;
+        this.form.patchValue({
+          prenom: user.prenom,
+          nom: user.nom,
+          email: user.email,
+          password: user.password,
+          role: user.role,
+          salleId: user.salleId,
+        });
+      },
+      error: () => {
+        this.loading = false;
+      },
     });
   }
 
-  submit(): void {
+  onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    const value = this.form.value as Omit<User, 'id' | 'createdAt'>;
+    const value = this.form.value as Omit<User, 'id'>;
 
-    if (this.isEditMode) {
-      this.userService.updateUser(this.userId, value);
+    if (this.userId) {
+      const payload: User = { id: this.userId, ...value };
+      this.userService.updateUser(this.userId, payload).subscribe(() => {
+        this.router.navigate(['/users']);
+      });
     } else {
-      this.userService.addUser(value);
+      this.userService.createUser(value).subscribe(() => {
+        this.router.navigate(['/users']);
+      });
     }
-
-    this.router.navigate(['/users']);
   }
 
   cancel(): void {

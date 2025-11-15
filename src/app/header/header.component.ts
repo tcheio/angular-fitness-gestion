@@ -17,12 +17,7 @@ export class HeaderComponent implements OnInit {
       {
         label: 'Home',
         icon: 'pi pi-home',
-        routerLink: '/',
-      },
-      {
-        label: 'Features',
-        icon: 'pi pi-star',
-        routerLink: '/features',
+        routerLink: '/home',
       },
       {
         label: 'Users',
@@ -30,46 +25,9 @@ export class HeaderComponent implements OnInit {
         routerLink: '/users',
       },
       {
-        label: 'Projects',
-        icon: 'pi pi-search',
-        items: [
-          {
-            label: 'Components',
-            icon: 'pi pi-bolt',
-            routerLink: '/components',
-          },
-          {
-            label: 'Blocks',
-            icon: 'pi pi-server',
-            routerLink: '/blocks',
-          },
-          {
-            label: 'UI Kit',
-            icon: 'pi pi-pencil',
-            routerLink: '/ui',
-          },
-          {
-            label: 'Templates',
-            icon: 'pi pi-palette',
-            items: [
-              {
-                label: 'Apollo',
-                icon: 'pi pi-palette',
-                routerLink: '/apollo',
-              },
-              {
-                label: 'Ultima',
-                icon: 'pi pi-palette',
-                routerLink: '/ultima',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        label: 'Contact',
-        icon: 'pi pi-envelope',
-        routerLink: '/contact',
+        label: 'Planning',
+        icon: 'pi pi-calendar',
+        routerLink: '/planning',
       },
     ];
   }

@@ -1,13 +1,9 @@
-export type CourseLevel = 'beginner' | 'intermediate' | 'advanced';
-
 export interface Course {
-  id: number;
-  title: string;
-  coach: string;
-  start: Date;
-  end: Date;
-  capacity: number;
-  level: CourseLevel;
-  room: string;
-  participantsCount: number;
+  id?: number;
+  titre: string;
+  description: string;
+  profId: number;
+  salleId: number;
+  horaire: string; // ISO string type "2025-10-18T09:00:00"
+  duree: number;   // en minutes
 }

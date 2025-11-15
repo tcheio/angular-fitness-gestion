@@ -21,7 +21,11 @@ export class UserListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.users$ = this.userService.users$;
+    this.loadUsers();
+  }
+
+  private loadUsers(): void {
+    this.users$ = this.userService.getUsers();
   }
 
   goToCreate(): void {
@@ -34,7 +38,7 @@ export class UserListComponent implements OnInit {
 
   delete(id: number): void {
     if (confirm('Supprimer cet utilisateur ?')) {
-      this.userService.deleteUser(id);
+      this.userService.deleteUser(id).subscribe(() => this.loadUsers());
     }
   }
 }

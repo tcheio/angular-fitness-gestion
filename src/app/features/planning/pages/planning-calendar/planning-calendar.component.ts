@@ -1,78 +1,89 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DatePickerModule } from 'primeng/datepicker';
-
-import { Course } from '../../../../models/course.model';
-import { PlanningService } from '../../services/planning.service';
-import { ReservationService } from '../../services/reservation.service';
+import { DatePicker } from 'primeng/datepicker';
+import { PlanningService, PlanningCourse } from '../../services/planning.service';
 
 @Component({
   selector: 'app-planning-calendar',
   standalone: true,
-  imports: [CommonModule, FormsModule, DatePickerModule],
+  imports: [CommonModule, FormsModule, DatePicker],
   templateUrl: './planning-calendar.component.html',
   styleUrls: ['./planning-calendar.component.scss'],
 })
 export class PlanningCalendarComponent implements OnInit {
-  courses: Course[] = [];
-  selectedDate: Date | null = null;
+  /** Tous les cours issus du json-server */
+  allCourses: PlanningCourse[] = [];
 
-  constructor(
-    private readonly planningService: PlanningService,
-    private readonly reservationService: ReservationService
-  ) {}
+  /** Date sélectionnée dans le calendrier */
+  selectedDate: Date | null = new Date();
+
+  /** Cours filtrés pour la date sélectionnée (utilisé par le template) */
+  coursesForSelectedDay: PlanningCourse[] = [];
+
+  constructor(private planningService: PlanningService) {}
 
   ngOnInit(): void {
-    this.planningService.courses$.subscribe(courses => {
-      this.courses = courses;
+    this.planningService.getPlanningCourses().subscribe((courses) => {
+      this.allCourses = courses;
+      this.updateCoursesForSelectedDay();
     });
-
-    this.selectedDate = new Date();
   }
 
-  get coursesForSelectedDay(): Course[] {
-    if (!this.selectedDate) return [];
-    return this.courses.filter(c => this.isSameDay(c.start, this.selectedDate!));
+  /** Quand on clique sur une date du calendrier */
+  onDateChange(date: Date): void {
+    this.selectedDate = date;
+    this.updateCoursesForSelectedDay();
   }
 
-  private isSameDay(d1: Date, d2: Date): boolean {
-    const a = new Date(d1);
-    const b = new Date(d2);
-    a.setHours(0, 0, 0, 0);
-    b.setHours(0, 0, 0, 0);
-    return a.getTime() === b.getTime();
-  }
-
-  // utilisé par la pastille bleue
+  /** Indique s'il existe au moins un cours pour la date de la cellule */
   hasCourse(dateMeta: any): boolean {
-    const d = new Date(dateMeta.year, dateMeta.month, dateMeta.day);
-    return this.courses.some(c => this.isSameDay(c.start, d));
-  }
+    if (!dateMeta) return false;
+    const cellDate = new Date(dateMeta.year, dateMeta.month, dateMeta.day);
+    const cellKey = this.toDateKey(cellDate);
 
-  getRemainingPlaces(course: Course): number {
-    return course.capacity - course.participantsCount;
-  }
-
-  canReserve(course: Course): boolean {
-    return (
-      this.getRemainingPlaces(course) > 0 &&
-      this.reservationService.canReserve(course.id)
+    return this.allCourses.some(
+      (course) => this.toDateKey(new Date(course.start)) === cellKey
     );
   }
 
-  reserve(course: Course): void {
-    const ok = this.reservationService.addReservation(course.id);
+  /** Nombre de places restantes */
+  getRemainingPlaces(course: PlanningCourse): number {
+    return course.capacity - course.participantsCount;
+  }
 
-    if (!ok) {
-      alert('Impossible de réserver ce cours (complet ou déjà réservé).');
+  /** Peut-on réserver ce cours ? (simple : il reste des places) */
+  canReserve(course: PlanningCourse): boolean {
+    return this.getRemainingPlaces(course) > 0;
+  }
+
+  /** Action de réservation (pour l'instant : simple alert, on branchera sur /inscriptions après) */
+  reserve(course: PlanningCourse): void {
+    if (!this.canReserve(course)) return;
+
+    // TODO: appeler un ReservationService + utilisateur connecté
+    alert(`Réservation simulée pour le cours "${course.title}" à ${new Date(course.start).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`);
+  }
+
+  /** Filtre allCourses en fonction de selectedDate */
+  private updateCoursesForSelectedDay(): void {
+    if (!this.selectedDate) {
+      this.coursesForSelectedDay = [];
       return;
     }
 
-    alert('Réservation enregistrée ✅');
+    const key = this.toDateKey(this.selectedDate);
+
+    this.coursesForSelectedDay = this.allCourses.filter(
+      (course) => this.toDateKey(new Date(course.start)) === key
+    );
   }
 
-  onDateChange(date: Date | null) {
-    this.selectedDate = date;
+  /** Normalisation de date sur la forme "YYYY-MM-DD" */
+  private toDateKey(date: Date): string {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day = `${date.getDate()}`.padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

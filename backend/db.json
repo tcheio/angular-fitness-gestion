@@ -1,16 +1,16 @@
 {
   "users": [
     {
-      "id": 1,
-      "nom": "Dupont",
+      "id": "1",
       "prenom": "Jean",
+      "nom": "Dupont",
       "email": "jean.dupont@example.com",
       "password": "admin123",
       "role": "admin",
-      "salleId": 1
+      "salleId": 2
     },
     {
-      "id": 2,
+      "id": "2",
       "nom": "Martin",
       "prenom": "Sophie",
       "email": "sophie.martin@example.com",
@@ -19,7 +19,7 @@
       "salleId": 1
     },
     {
-      "id": 3,
+      "id": "3",
       "nom": "Durand",
       "prenom": "Luc",
       "email": "luc.durand@example.com",
@@ -28,70 +28,69 @@
       "salleId": 2
     }
   ],
-
   "salles": [
     {
-      "id": 1,
+      "id": "1",
       "nom": "FitZone Paris",
       "adresse": "12 rue du Sport, Paris",
       "ouverte": true
     },
     {
-      "id": 2,
+      "id": "2",
       "nom": "BodyGym Lyon",
       "adresse": "5 avenue du Rhône, Lyon",
       "ouverte": false
     }
   ],
-
   "cours": [
-    {
-      "id": 1,
-      "titre": "Yoga débutant",
-      "description": "Cours d’initiation au yoga",
-      "profId": 2,
-      "salleId": 1,
-      "horaire": "2025-10-18T09:00:00",
-      "duree": 60
-    },
-    {
-      "id": 2,
-      "titre": "Crossfit intensif",
-      "description": "Entraînement intensif pour sportifs confirmés",
-      "profId": 2,
-      "salleId": 1,
-      "horaire": "2025-10-19T18:00:00",
-      "duree": 45
-    },
-    {
-      "id": 3,
-      "titre": "Zumba fun",
-      "description": "Danse et cardio en rythme !",
-      "profId": 2,
-      "salleId": 2,
-      "horaire": "2025-10-20T17:30:00",
-      "duree": 50
-    }
-  ],
-
+  {
+    "id": 1,
+    "titre": "Yoga débutant",
+    "description": "Cours d’initiation au yoga",
+    "profId": 2,
+    "salleId": 1,
+    "horaire": "2025-11-15T09:00:00",
+    "duree": 60,
+    "capacite": 12
+  },
+  {
+    "id": 2,
+    "titre": "Crossfit intensif",
+    "description": "Entraînement intensif pour sportifs confirmés",
+    "profId": 2,
+    "salleId": 1,
+    "horaire": "2025-11-15T18:00:00",
+    "duree": 45,
+    "capacite": 16
+  },
+  {
+    "id": 3,
+    "titre": "Zumba fun",
+    "description": "Danse et cardio en rythme !",
+    "profId": 2,
+    "salleId": 2,
+    "horaire": "2025-11-15T17:30:00",
+    "duree": 50,
+    "capacite": 20
+  }
+],
   "inscriptions": [
     {
-      "id": 1,
+      "id": "1",
       "userId": 3,
       "coursId": 1,
-      "dateInscription": "2025-10-10T10:00:00"
+      "dateInscription": "2025-11-11T10:00:00"
     },
     {
-      "id": 2,
+      "id": "2",
       "userId": 3,
       "coursId": 3,
-      "dateInscription": "2025-10-12T14:00:00"
+      "dateInscription": "2025-11-11T14:00:00"
     }
   ],
-
   "historiques": [
     {
-      "id": 1,
+      "id": "1",
       "userId": 3,
       "action": "Changement de salle",
       "ancienneSalleId": 1,

@@ -1,1 +1,47 @@
-<p>login works!</p>
+<div class="login-container">
+  <div class="login-card">
+    <h1>Connexion</h1>
+
+    <form (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
+      </div>
+
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'Connexion...' : 'Se connecter' }}
+      </button>
+
+      <p class="error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </p>
+    </form>
+
+    <div class="hint">
+        <p><strong>Comptes de test (json-server) :</strong></p>
+        <ul>
+            <li>admin : jean.dupont&#64;example.com / admin123</li>
+            <li>prof : sophie.martin&#64;example.com / prof123</li>
+            <li>adhérent : luc.durand&#64;example.com / adherent123</li>
+        </ul>
+        </div>
+  </div>
+</div>
+    
