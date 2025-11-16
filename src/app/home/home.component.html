@@ -3,8 +3,13 @@
     <h1>Bienvenue sur Fitness Gestion</h1>
     <p>Gérez votre parcours fitness facilement</p>
     <div class="actions">
-      <p-button label="Commencer" icon="pi pi-play" severity="success"></p-button>
-      <p-button label="En savoir plus" icon="pi pi-info-circle" [outlined]="true"></p-button>
+      <router-link routerLink="/planning" class="mr-3">
+        <p-button
+          label="Commencer"
+          icon="pi pi-play"
+          severity="success"
+        ></p-button>
+      </router-link>
     </div>
   </div>
 
@@ -32,8 +37,8 @@
     </p-card>
     <p-card>
       <div class="stat-item">
-        <span class="stat-value">{{ stats.goals }}</span>
-        <span class="stat-label">Objectifs atteints</span>
+        <span class="stat-value">{{ stats.salles }}</span>
+        <span class="stat-label">Salles partenaires</span>
       </div>
     </p-card>
   </div>
