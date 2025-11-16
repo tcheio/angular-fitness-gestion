@@ -74,7 +74,26 @@
       "capacite": 20
     }
   ],
-  "inscription-cours": [],
+  "inscription-cours": [
+    {
+      "id": "67ab",
+      "coursId": "2",
+      "userId": "3",
+      "dateInscription": "2025-11-16T13:57:16.774Z"
+    },
+    {
+      "id": "1363",
+      "coursId": "3",
+      "userId": "3",
+      "dateInscription": "2025-11-16T13:57:17.253Z"
+    },
+    {
+      "id": "f33a",
+      "coursId": "1",
+      "userId": "3",
+      "dateInscription": "2025-11-16T14:00:45.396Z"
+    }
+  ],
   "historiques": [
     {
       "id": "1",

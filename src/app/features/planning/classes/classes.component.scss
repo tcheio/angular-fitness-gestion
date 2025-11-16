@@ -1,0 +1,139 @@
+.planning-root {
+  padding: 2.5rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+/* Calendrier centré */
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.planning-datepicker {
+  display: inline-block;
+}
+
+/* pastille bleue sur les jours avec cours */
+.day-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.day-dot {
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #2563eb;
+}
+
+/* Tableau en dessous */
+.courses-panel {
+  text-align: left;
+}
+
+.courses-panel h2 {
+  margin-bottom: 1.2rem;
+}
+
+.courses-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+
+  th,
+  td {
+    padding: 0.9rem 1.1rem;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    font-size: 0.9rem;
+  }
+
+  thead {
+    background: #f9fafb;
+    color: #6b7280;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  tbody tr:hover {
+    background: #f3f4f6;
+  }
+}
+
+.badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+
+.badge.beginner {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.badge.intermediate {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.badge.advanced {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.remaining {
+  font-size: 0.8rem;
+  color: #4b5563;
+  margin-left: 0.25rem;
+}
+
+.full {
+  font-size: 0.8rem;
+  color: #b91c1c;
+  margin-left: 0.25rem;
+}
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.1s;
+}
+
+.btn.primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn.primary[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.no-courses {
+  color: #6b7280;
+}
