@@ -1,0 +1,59 @@
+<section class="planning-root">
+  <h1>Mes réservations</h1>
+
+  <!-- COURS EN DESSOUS -->
+  <div class="courses-panel">
+    <ng-container>
+      <table class="courses-table">
+        <thead>
+          <tr>
+            <th>Cours</th>
+            <th>Coach</th>
+            <th>Heure</th>
+            <th>Salle</th>
+            <th>Niveau</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let course of allCourses">
+            <td>{{ course.title }}</td>
+
+            <td>{{ course.coach }}</td>
+
+            <td>
+              {{ course.start | date : "HH:mm" }} –
+              {{ course.end | date : "HH:mm" }}
+            </td>
+
+            <td>{{ course.room }}</td>
+
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  beginner: course.level === 'beginner',
+                  intermediate: course.level === 'intermediate',
+                  advanced: course.level === 'advanced',
+                }"
+              >
+                {{ course.level }}
+              </span>
+            </td>
+
+            <td>
+              <button class="btn secondary" (click)="cancelReservation(course)">
+                Annuler
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+
+    <ng-template #noCourses>
+      <p class="no-courses">Aucun cours prévu pour cette date.</p>
+    </ng-template>
+  </div>
+</section>
